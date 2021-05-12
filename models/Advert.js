@@ -14,6 +14,6 @@ const schema = new Schema({
     type: Schema.Types.Number,
     required: true,
   },
-});
+}, { collection: 'Advert' });
 
 module.exports = model('Advert', schema);
