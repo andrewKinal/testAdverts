@@ -8,7 +8,7 @@
     "dev": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrii Kinal",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^9.0.2",

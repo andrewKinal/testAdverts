@@ -1,13 +1,14 @@
 const database = require('./config/database');
 const app = require('./config/express');
 
+const routes = require('./routes/advert.route');
+const joiMiddleware = require('./middlewares/joiMiddleware');
+
 const port = app.get('port');
 
-const routes = require('./routes/advert.route');
-
 app.use('/api', routes);
-
-app.get('*', (req, res) => {
+app.use(joiMiddleware);
+app.use('*', (req, res) => {
   res.status(404).json({
     status: 'Error',
     message: 'Not Found',
