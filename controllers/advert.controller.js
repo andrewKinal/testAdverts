@@ -1,8 +1,38 @@
 const Advert = require('../models/Advert');
 
 const getAllAdverts = async (req, res) => {
+  const limit = 10;
+  const { page = 1, sorting = 'createdUp' } = req.query;
   try {
-    const data = await Advert.find({});
+    let data;
+    const baseQuery = Advert.find({}, { title: 'title', price: 'price', photoLinks: { $slice: 1 } });
+    
+    switch(sorting) {
+      case 'createdDown':
+        data = await baseQuery
+          .sort({createdAt: -1})
+          .limit(limit * 1)
+          .skip((page - 1) * limit);
+        break;
+      case 'priceUp':
+        data = await baseQuery
+          .sort({price: 1})
+          .limit(limit * 1)
+          .skip((page - 1) * limit);
+        break;
+      case 'priceDown':
+        data = await baseQuery
+          .sort({price: -1})
+          .limit(limit * 1)
+          .skip((page - 1) * limit);
+        break;
+      default: 
+        data = await baseQuery
+          .limit(limit * 1)
+          .skip((page - 1) * limit);
+        break;
+    }
+    
     res.status(200).json({
       status: 'ok',
       data
@@ -19,7 +49,7 @@ const getAdvert = async (req, res) => {
     const {fields} = req.query;
     let data;
     if(fields === 'true') {
-      data = await Advert.findById({ _id: id });
+      data = await Advert.findById({ _id: id }, { title: 'title', description: 'description', price: 'price', photoLinks: 'photoLinks' });
     } else {
       data = await Advert.findById({ _id: id }, { title: 'title', price: 'price', photoLinks: { $slice: 1 } });
     }
