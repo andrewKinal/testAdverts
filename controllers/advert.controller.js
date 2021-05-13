@@ -1,4 +1,5 @@
 const Advert = require('../models/Advert');
+const { advertExist } = require('../utils/checkAdverts');
 
 const getAllAdverts = async (req, res) => {
   const limit = 10;
@@ -44,9 +45,19 @@ const getAllAdverts = async (req, res) => {
   }
 }
 const getAdvert = async (req, res) => {
+  const { id } = req.params;
+  const {fields} = req.query;
+  
+  const check = await advertExist(id);
+  if(!check) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Advert does not exist',
+    });
+  }
+
   try {
-    const { id } = req.params;
-    const {fields} = req.query;
+    
     let data;
     if(fields === 'true') {
       data = await Advert.findById({ _id: id }, { title: 'title', description: 'description', price: 'price', photoLinks: 'photoLinks' });
