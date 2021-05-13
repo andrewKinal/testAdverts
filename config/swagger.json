@@ -1,0 +1,364 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Test Advert API",
+    "description": "Documentation for our API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api"
+    }
+  ],
+  "components": {
+    "responses": {
+      "400": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Invalid data"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not Found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Advert": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "ObjectId",
+            "description": "Unique identifier representing a specific advert",
+            "example": "607421b518477308ec1969da"
+          },
+          "titile": {
+            "type": "string",
+            "description": "Title for advert",
+            "required": true,
+            "example": "Test title for advert"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description for advert",
+            "required": true,
+            "example": "Test description for advert"
+          },
+          "photoLinks": {
+            "type": "array",
+            "description": "Array of image links",
+            "links": { "type": "string" },
+            "required": true,
+            "example": [
+              "https://via.placeholder.com/150",
+              "https://via.placeholder.com/250",
+              "https://via.placeholder.com/350"
+            ]
+          },
+          "price": {
+            "type": "number",
+            "description": "Price for advert",
+            "required": true,
+            "example": 400
+          },
+          "createdAt": {
+            "type": "date",
+            "format": "date-time",
+            "description": "Advert creation datetime"
+          },
+          "updatedAt": {
+            "type": "date",
+            "format": "date-time",
+            "description": "Advert update datetime"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Get all adverts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "Param for pagination. Return 10 elements from DB",
+            "schema": {
+              "type": "string",
+              "default": "1",
+              "example": "1"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sorting",
+            "description": "Check sorting method.",
+            "default": "creadetUp",
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "createdDown": {
+                "type": "string",
+                "description": "Returned from old to new adverts"
+              },
+              "createdUp": {
+                "type": "string",
+                "description": "Returned from new to old adverts"
+              },
+              "priceDown": {
+                "type": "string",
+                "description": "Returned adverts from expensive to cheap"
+              },
+              "priceUp": {
+                "type": "string",
+                "description": "Returned adverts from cheap to expensive"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "data": {
+                      "type": "array",
+                      "example": [
+                        {
+                            "photoLinks": [
+                                "https://via.placeholder.com/150"
+                            ],
+                            "_id": "609beb3948bfae06340a53df",
+                            "title": "Test Title",
+                            "price": 150
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new advert",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "Test Advert Title"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Test Advert Description"
+                  },
+                  "photoLinks": {
+                    "type": "array",
+                    "example": [
+                      "https://via.placeholder.com/150",
+                      "https://via.placeholder.com/250",
+                      "https://via.placeholder.com/350"
+                    ]
+                  },
+                  "price": {
+                    "type": "number",
+                    "example": 300
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "609beb3948bfae06340a53df"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "500": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "500"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bad Request"
+                    },
+                    "details": {
+                      "type": "array",
+                      "example": [{
+                        "message": "\"photoLinks\" must contain at least 1 items",
+                        "param": [
+                            "photoLinks"
+                        ]
+                      }]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get one advert by id",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "If true - returns more data with all images and description",
+            "schema": {
+              "type": "boolean",
+              "default": "false",
+              "example": "true"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "data": {
+                      "type": "object",
+                      "example": {
+                        "photoLinks": [
+                            "https://via.placeholder.com/150"
+                        ],
+                        "_id": "609beb3948bfae06340a53df",
+                        "title": "Test Title",
+                        "price": 150
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Advert does not exist"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    }
+  }
+}

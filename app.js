@@ -1,10 +1,15 @@
 const database = require('./config/database');
 const app = require('./config/express');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./config/swagger.json');
+
 const routes = require('./routes/advert.route');
 const joiMiddleware = require('./middlewares/joiMiddleware');
 
 const port = app.get('port');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api', routes);
 app.use(joiMiddleware);
