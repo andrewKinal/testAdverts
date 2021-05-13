@@ -8,10 +8,18 @@ npm i
 npm start or npm run dev(running nodemon)
 ```
 Routes:
-  /api
+  
+```sh
+/api
+```
 
 You can test it on heroku:
-  https://advertsapi.herokuapp.com/api
+```sh
+https://advertsapi.herokuapp.com/api
+```
   
- Swagger:
-  /api-docs
+Swagger:
+```sh
+ /api-docs
+```
+ 
