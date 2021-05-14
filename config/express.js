@@ -4,9 +4,10 @@ const cors = require('cors');
 
 require('dotenv').config();
 app.set('port', process.env.PORT || 3000);
+app.set('host', process.env.HOST || 'localhost')
 
 const corsOptions = {
-  origin: `http://localhost:${app.get('port')}`,
+  origin: `http://${app.get('host')}:${app.get('port')}`,
 };
 
 app.use(cors(corsOptions));
